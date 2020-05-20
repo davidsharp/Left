@@ -1,5 +1,7 @@
 'use strict'
 
+const { ipcRenderer } = require('electron')
+
 function Reader () {
   this.segment = { from: 0, to: 0, text: '', words: [] }
   this.queue = []
@@ -45,6 +47,8 @@ function Reader () {
     html += "<span style='float:right'>" + left.reader.queue.length + 'W ' + parseInt((left.reader.queue.length * 175) / 1000) + 'S ' + parseInt(((left.reader.index) / parseFloat(left.reader.queue.length + left.reader.index)) * 100) + '% ' + parseInt((1000 / left.reader.speed) * 60) + 'W/M</span>'
     left.stats.el.innerHTML = html
 
+    ipcRenderer.send('reader-update', word)
+
     left.reader.queue = left.reader.queue.splice(1, left.reader.queue.length - 1)
     left.reader.index += 1
 
@@ -65,6 +69,8 @@ function Reader () {
     this.active = false
     left.operator.stop()
     left.update()
+
+    ipcRenderer.send('reader-clear')
   }
 
   this.find_orp = function (w, words) {

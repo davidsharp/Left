@@ -2,12 +2,15 @@
 
 /* global createWindow */
 
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, TouchBar } = require('electron')
+const { TouchBarLabel } = TouchBar
 const path = require('path')
 
 let isShown = true
 
 app.win = null
+
+global.touchBarLabel = new TouchBarLabel()
 
 app.on('ready', () => {
   app.win = new BrowserWindow({
@@ -25,6 +28,7 @@ app.on('ready', () => {
   })
 
   app.win.loadURL(`file://${__dirname}/sources/index.html`)
+  app.win.setTouchBar(new TouchBar({items:[global.touchBarLabel]}))
   // app.inspect()
 
   app.win.on('closed', () => {
@@ -79,3 +83,6 @@ app.injectMenu = function (menu) {
     console.warn('Cannot inject menu.')
   }
 }
+
+ipcMain.on('reader-update', (event, arg) => { global.touchBarLabel.label = arg })
+ipcMain.on('reader-clear', (event, arg) => { global.touchBarLabel.label = null })
