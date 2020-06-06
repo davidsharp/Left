@@ -11,6 +11,7 @@ const Project = require('./scripts/project')
 const Reader = require('./scripts/reader')
 const Insert = require('./scripts/insert')
 const Font = require('./scripts/font')
+const Markdown = require('./scripts/markdown')
 
 const EOL = '\n'
 
@@ -26,6 +27,7 @@ function Left () {
   this.reader = new Reader()
   this.insert = new Insert()
   this.font = new Font()
+  this.markdown = new Markdown()
 
   this.textarea_el = document.createElement('textarea')
   this.drag_el = document.createElement('drag')
@@ -68,6 +70,7 @@ function Left () {
       this.project.page().commit()
     })
 
+    this.markdown.install(host)
     this.theme.install(host)
   }
 
@@ -97,6 +100,7 @@ function Left () {
     this.project.update()
     this.navi.update()
     this.stats.update()
+    this.markdown.update()
   }
 
   //

@@ -37,5 +37,8 @@
     "ignore": [
       "/node_modules/*"
     ]
+  },
+  "dependencies": {
+    "marked": "^1.1.0"
   }
 }
